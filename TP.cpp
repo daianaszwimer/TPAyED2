@@ -83,7 +83,7 @@ void bubbleSort(nodo*&Q){
 
 nodo* buscar (nodo*&C, int d){
 	nodo*ret=C;
-	while (ret!=NULL || ret->info.votos>=d){
+	while (ret!=NULL && ret->info.votos>=d){
 		ret=ret->sgte;
 	}
 	return ret;
