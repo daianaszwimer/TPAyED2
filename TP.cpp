@@ -15,15 +15,14 @@ struct nodo{
 	partidos info;
 	nodo* sgte;
 };
-nodo*ret;
+nodo*ret; //este ret va para la función BUSCAR, pero necesitaba declararlo universalmente
 void agregarPrincipio (nodo*&L, partidos aux);
 nodo* buscar (nodo*&C, int d);
-void bubbleSort(nodo*&Q);
-int n=0;
-FILE*PASO;
+void bubbleSort(nodo*&Q); //método de ordenamiento
 
 int main() {
-	PASO=fopen("paso.dat","wb+");
+	FILE*PASO;
+	PASO=fopen("paso.dat","wb+");//wb+ porque primero lo subimos al archivo, solo para después bajarlo
 	cout << "Ingrese la primer lista, para terminar el ingreso de partidos al archivo, ingrese \"-1\"." << endl;
 	cin >> aux.lista;
 	while (aux.lista!=-1) {
@@ -41,16 +40,15 @@ int main() {
 	while (!feof(PASO)) {
 		if (aux.votos>=1.5) {
 			agregarPrincipio(L,aux);
-			n++;
 			fread(&aux, sizeof(partidos), 1, PASO);
 		}
 	}
 	bubbleSort(L);
-	buscar(L,51);
+	buscar(L,51); //para buscar si alguno llegó al 51%
 	while(L!=NULL){
 		cout <<L->info.lista << endl;
 	}
-	if(ret!=NULL){
+	if(ret!=NULL){ //el ret viene de BUSCAR
 		cout<<"¡La lista " << ret->info.lista << " alcanzó un porcentaje de votos mayor al 51%!" << endl;
 	}
 	return 0;
