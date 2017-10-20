@@ -76,8 +76,9 @@ void agregarPrincipio (nodo*&L, partidos x) {
 		Nuevo->sgte=L;
 		L=Nuevo;
 };
+
 nodo* buscar (nodo*&C, int d){
-	while (ret!=NULL || ret->info.votos<d){
+	while (ret!=NULL && ret->info.votos<d){
 		ret=ret->sgte;
 	}
 	return ret;
