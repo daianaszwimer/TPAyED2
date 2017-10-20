@@ -43,10 +43,11 @@ int main() {
 			fread(&aux, sizeof(partidos), 1, PASO);
 		}
 	}
-	bubbleSort(L);
-	buscar(L,51); //para buscar si alguno llegó al 51%
+	//bubbleSort(L);
+	ret = buscar(L,51); //para buscar si alguno llegó al 51%
 	while(L!=NULL){
 		cout <<L->info.lista << endl;
+		L = L->sgte;
 	}
 	if(ret!=NULL){ //el ret viene de BUSCAR
 		cout<<"¡La lista " << ret->info.lista << " alcanzó un porcentaje de votos mayor al 51%!" << endl;
@@ -65,15 +66,12 @@ void bubbleSort(nodo*&Q){
 	nodo*P;
 	int t;
 	P=Q;
-	while(P->sgte != NULL){
+	while(P != NULL){
 		P=Q->sgte;
-		while(P!=NULL){
-			if (Q->info.lista > P->info.lista){
-				t=P->info.lista;
-				P->info.lista=Q->info.lista;
-				Q->info.lista=t;
-			}
-			P=P->sgte;
+		if (Q->info.lista > P->info.lista){
+			t=P->info.lista;
+			P->info.lista=Q->info.lista;
+			Q->info.lista=t;
 		}
 		Q=Q->sgte;
 		P=Q->sgte;
