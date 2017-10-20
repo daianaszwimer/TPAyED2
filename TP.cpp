@@ -28,7 +28,7 @@ int main(){
 		while (aux.lista!=-1) {
 			cout << "Ingrese las siglas del partido (hasta 5)" << endl;
 			cin >> aux.siglas;
-			cout << "Ingrese la cantidad porcentual de votos." << endl;
+			cout << "Ingrese la cantidad porcentual de votos. Asegúrese de que entre todos los partidos no superen el 100% (ingrese resultados realistas)." << endl;
 			cin >> aux.votos;
 			fwrite(&aux, sizeof(partidos), 1, PASO);
 			cout << "Ingrese la primer lista, para terminar el ingreso de partidos al archivo, ingrese \"-1\"." << endl;
