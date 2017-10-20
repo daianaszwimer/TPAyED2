@@ -8,21 +8,21 @@ struct partidos {
 	float votos;
 	int lista;
 };
-
-partidos aux;
-
 struct nodo{
 	partidos info;
 	nodo* sgte;
 };
-nodo*ret; //este ret va para la función BUSCAR, pero necesitaba declararlo universalmente
-void agregarPrincipio (nodo*&L, partidos aux);
+partidos aux;
+void agregarPrincipio (nodo*&L, partidos x);
+void insertarOrdenado (nodo*&L, partidos x);
 nodo* buscar (nodo*&C, int d);
-void bubbleSort(nodo*&Q); //método de ordenamiento
+nodo*C;
+nodo*ret=C;
 
-int main() {
+int main(){
 	FILE*PASO;
-	PASO=fopen("paso.dat","wb+");//wb+ porque primero lo subimos al archivo, solo para después bajarlo
+	nodo*L=NULL;
+	PASO=fopen("PASO.dat","wb+");
 	cout << "Ingrese la primer lista, para terminar el ingreso de partidos al archivo, ingrese \"-1\"." << endl;
 	cin >> aux.lista;
 	while (aux.lista!=-1) {
@@ -35,25 +35,40 @@ int main() {
 		cin >> aux.lista;
 	}
 	rewind(PASO);
-	fread(&aux, sizeof (partidos), 1, PASO);
-	nodo*L=NULL;
-	while (!feof(PASO)) {
+	fread(&aux, sizeof(partidos), 1, PASO);
+	while (!feof(PASO)){
 		if (aux.votos>=1.5) {
-			agregarPrincipio(L,aux);
-			fread(&aux, sizeof(partidos), 1, PASO);
+			insertarOrdenado(L, aux);
 		}
+		fread(&aux, sizeof(partidos), 1, PASO);
 	}
-	//bubbleSort(L);
-	ret = buscar(L,51); //para buscar si alguno llegó al 51%
-	while(L!=NULL){
-		cout <<L->info.lista << endl;
-		L = L->sgte;
+	fclose(PASO);
+	ret=buscar(L,51);
+	while (L!=NULL){
+		cout << L->info.lista << endl;
+		L=L->sgte;
 	}
-	if(ret!=NULL){ //el ret viene de BUSCAR
-		cout<<"¡La lista " << ret->info.lista << " alcanzó un porcentaje de votos mayor al 51%!" << endl;
-	}
-	return 0;
+	cout << ret << endl;
 }
+
+void insertarOrdenado (nodo*&L, partidos x) {
+	if (L==NULL || x.votos<L->info.votos) {
+		agregarPrincipio (L, x);
+	}
+	else {
+		nodo*Nuevo= new nodo();
+		Nuevo->info=x;
+		Nuevo->sgte= NULL;
+		nodo*aux2=L;
+		nodo*ant=L;
+		while (aux2!=NULL && aux2->info.votos<x.votos) {
+			ant=aux2;
+			aux2=aux2->sgte;
+		}
+		ant->sgte=Nuevo;
+		Nuevo->sgte=aux2;
+	}
+};
 
 void agregarPrincipio (nodo*&L, partidos x) {
 	nodo*Nuevo=new nodo();
@@ -61,27 +76,8 @@ void agregarPrincipio (nodo*&L, partidos x) {
 		Nuevo->sgte=L;
 		L=Nuevo;
 };
-
-void bubbleSort(nodo*&Q){
-	nodo*P;
-	int t;
-	P=Q;
-	while(P != NULL){
-		P=Q->sgte;
-		if (Q->info.lista > P->info.lista){
-			t=P->info.lista;
-			P->info.lista=Q->info.lista;
-			Q->info.lista=t;
-		}
-		Q=Q->sgte;
-		P=Q->sgte;
-	}
-}
-
-
 nodo* buscar (nodo*&C, int d){
-	nodo*ret=C;
-	while (ret!=NULL && ret->info.votos>=d){
+	while (ret!=NULL || ret->info.votos<d){
 		ret=ret->sgte;
 	}
 	return ret;
